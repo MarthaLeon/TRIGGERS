@@ -1,0 +1,104 @@
+CREATE DATABASE SUPERMERCADO_TRIGGERS;
+USE SUPERMERCADO_TRIGGERS;
+
+CREATE TABLE INVENTARIO (
+  idProducto INT(18) NOT NULL,
+  cantidad INT(18) NULL,
+  valor INT(18) NULL,
+  PRIMARY KEY (idProducto)
+);
+
+
+
+CREATE TABLE PRODUCTOS (
+  idProducto INT(18) NOT NULL,
+  idTipoProducto INT(18) NULL,
+  nombreProducto VARCHAR(50) CHARACTER SET 'utf8' NULL DEFAULT NULL,
+  valorVenta INT(18) NULL DEFAULT NULL,
+  PRIMARY KEY (idProducto)
+);
+
+
+
+
+CREATE TABLE TIPO_PRODUCTO (
+  idTipoProducto INT(18) NOT NULL DEFAULT '0',
+  nombreTipoProducto VARCHAR(50) CHARACTER SET 'utf8' NULL,
+  PRIMARY KEY (`idTipoProducto`)
+  );
+
+
+
+CREATE TABLE CLIENTES (
+  ID_Cliente INT NOT NULL,
+  NombreCompleto VARCHAR(50) NOT NULL,
+  Celular INT NOT NULL,
+  Tipo_doc_codigo INT NOT NULL,
+  PRIMARY KEY (ID_Cliente)
+);
+
+
+
+
+
+CREATE TABLE TIPOS_DOCUMENTOS (
+  Cod_TD INT NOT NULL,
+  Abrev_TD VARCHAR(10) NOT NULL,
+  Nombre_TD VARCHAR(45) NOT NULL,
+ PRIMARY KEY (Cod_TD)
+);
+
+
+
+
+INSERT INTO inventario VALUES ('10001','10','5000'); 
+INSERT INTO inventario VALUES ('10002','12','7000'); 
+INSERT INTO inventario VALUES ('10003','15','4500'); 
+INSERT INTO inventario VALUES ('10004','14','8000'); 
+
+
+INSERT INTO productos VALUES ('10001','001','Arroz','5000'); 
+INSERT INTO productos VALUES ('10002','002','Lenteja','7000'); 
+INSERT INTO productos VALUES ('10003','003','Fríjol','4500'); 
+INSERT INTO productos VALUES ('10004','004','Garbanzo','5000'); 
+
+
+INSERT INTO tipo_producto VALUES ('55001','Alimentos'); 
+INSERT INTO tipo_producto VALUES ('55002','Implementos de aseo'); 
+INSERT INTO tipo_producto VALUES ('55003','Bebidas'); 
+INSERT INTO tipo_producto VALUES ('55004','Utensilios de cocina'); 
+
+
+INSERT INTO clientes VALUES ('90001','AAAAA','311900555','1'); 
+INSERT INTO clientes VALUES ('90002','BBBBB','3125678901','1'); 
+INSERT INTO clientes VALUES ('90003','CCCCC','3152345678','1'); 
+INSERT INTO clientes VALUES ('90004','DDDDD','316908765','1'); 
+
+
+INSERT INTO tipos_documentos VALUES ('1','CC','Cedula de Ciudadanía'); 
+INSERT INTO tipos_documentos VALUES ('2','TI','Tarjeta de identidad'); 
+INSERT INTO tipos_documentos VALUES ('3','PS','Pasaporte'); 
+INSERT INTO tipos_documentos VALUES ('4','NIT','Número de identificación tributaria'); 
+
+NUEVA TABLA:
+CREATE TABLE INVENTARIO_ACTUAL(
+kardex_inventario int primary key auto_increment,
+fecha datetime,
+nota varchar(50),
+cantidadAnterior int,
+cantidadNuevo int);
+
+
+TRIGGER:
+delimiter //
+create trigger INVENTARIO_ACTUAL
+after update on inventario
+for each row
+         begin
+                   insert into INVENTARIO_ACTUAL (usuario, fecha, nota, cantidadAnterior,cantidadNuevo)
+                    values(user(), now(),"Ha cambiado el inventario", OLD.cantidad, NEW.cantidad); 
+         end
+//
+
+
+
